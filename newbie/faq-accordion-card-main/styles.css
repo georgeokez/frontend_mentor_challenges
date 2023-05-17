@@ -1,0 +1,52 @@
+body{
+    margin: 0;
+}
+
+p{
+    margin:0;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: hsl(273, 75%, 66%); 
+    background-image: linear-gradient(hsl(273, 75%, 66%), hsl(240, 73%, 65%));
+}
+
+.component{
+    width:1000px;
+    height:550px;
+    background-color: #fff;
+    display: flex;
+}
+
+.left-side{
+    position: relative;
+    width:50%;
+    overflow: hidden;
+}
+
+.desktop-img{
+    position: absolute;
+    right:-5%;
+    bottom:-23%;
+}
+
+.woman-img{
+    position: absolute;
+    left:-20%;
+    top:15%;    
+}
+
+.box-img{
+    position: absolute;
+    top:40%;
+    left:-25%;
+}
+
+.left-side{
+    width:50%;
+}
