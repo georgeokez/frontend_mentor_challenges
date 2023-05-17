@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+}
+
+body {
+    
+}
+
+.container-test{
+    position: relative;
+    border: 2px solid red;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.center-panel-test{
+    display:flex;
+    flex-direction: column;
+    position: absolute;
+    top:20%;
+    border: 2px solid green;
+}
+
+.content-test {
+    border: 2px solid blue;
+}

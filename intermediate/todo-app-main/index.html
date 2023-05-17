@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="stylesheet" type="text/css" href="./styles.css">
+  
+  <title>George | Todo app</title>
+</head>
+<body>
+<main class="container">
+  <div class="center-panel">
+      <h1>Todo App</h1> 
+
+      <form action="" class="todo-form">
+        <input type="text" id="todo-input-text" placeholder="Create new todo" class="todo-input-text" >
+        <div class="todo-input-btn">+</div>
+      </form>
+
+      <p class="display-no-todo" id="display-no-todo">
+        No Todo has been added
+      </p>
+
+      <div class="todo-items" id="todo-items">
+        <div class="todo-item" id="todo-item1">
+          <div class="todo-context">
+            Todo Item 1
+          </div>
+          <div class="todo-delete-btn">
+            delete
+          </div>
+        </div>
+  
+        <div class="todo-item" id="todo-item2">
+          <div class="todo-context">
+            Todo Item 2
+          </div>
+          <div class="todo-delete-btn">
+            delete
+          </div>
+        </div>
+
+        <div class="todo-item" id="todo-item3">
+          <div class="todo-context">
+            Todo Item 3
+          </div>
+          <div class="todo-delete-btn">
+            delete
+          </div>
+        </div>
+      </div>  
+
+      <div class="footer" id="footer">
+        All
+        Active 
+        Completed
+        Clear Completed
+      </div>
+    
+  </div>
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
