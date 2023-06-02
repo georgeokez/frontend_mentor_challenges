@@ -66,32 +66,31 @@ const Plans = {
 };
 
 class Addon {
-  constructor(name, description, price, selected) {
+  constructor(name, description, price, billingPeriod) {
     this.name = name;
     this.description = description;
     this.price = price;
-    this.selected = selected;
+    this.billingPeriod = billingPeriod;
   }
 }
-
-const onlineService = new Addon(
-  "Online service",
+const addOnNames = ["Online service", "Larger storage", "Customizable profile"];
+const addOnDescriptions = [
   "Access to multiplayer games",
-  1,
-  false
-);
-const largerStorage = new Addon(
-  "Larger storage",
-  "Extra 1TB of cloud profile",
-  2,
-  false
-);
-const customizableProfile = new Addon(
-  "Customizable Profile",
+  "Extra 1TB of cloud save",
   "Custom theme on your profile",
-  2,
-  false
-);
+];
+
+const monthlyAddOns = [
+  new Addon(addOnNames[0], addOnDescriptions[0], 1, BillingPeriod.Monthly),
+  new Addon(addOnNames[1], addOnDescriptions[1], 2, BillingPeriod.Monthly),
+  new Addon(addOnNames[2], addOnDescriptions[2], 2, BillingPeriod.Monthly),
+];
+
+const yearlyAddOns = [
+  new Addon(addOnNames[0], addOnDescriptions[0], 10, BillingPeriod.Yearly),
+  new Addon(addOnNames[1], addOnDescriptions[1], 20, BillingPeriod.Yearly),
+  new Addon(addOnNames[2], addOnDescriptions[2], 20, BillingPeriod.Yearly),
+];
 
 const StepTwo = {
   plan: Plans.monthly.arcade,
@@ -99,7 +98,11 @@ const StepTwo = {
 };
 
 const StepThree = {
-  addOns: [],
+  addOns: {
+    onlineService: {},
+    largerStorage: {},
+    customizableProfile: {},
+  },
   billingPeriod: StepTwo.billingPeriod,
 };
 
@@ -248,12 +251,29 @@ nextBtnStepOne.addEventListener("click", () => {
 nextBtnStepTwo.addEventListener("click", () => {
   console.log("Next button on step 2 clicked");
   // write logic here
+  const prices = document.querySelectorAll(
+    ".step-3 .body .add-ons .add-on .price"
+  );
+  if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+    StepThree.billingPeriod = BillingPeriod.Monthly;
+    prices[0].innerHTML = "+$1/mo";
+    for (let i = 1; i < prices.length; i++) {
+      prices[i].innerHTML = "+$2/mo";
+    }
+  }
+
+  if (StepTwo.billingPeriod == BillingPeriod.Yearly) {
+    StepThree.billingPeriod = BillingPeriod.Yearly;
+    prices[0].innerHTML = "+$10/yr";
+    for (let i = 1; i < prices.length; i++) {
+      prices[i].innerHTML = "+$20/yr";
+    }
+  }
   moveToNextStep(flowManager.currentStep);
 });
 
 prevBtnStepTwo.addEventListener("click", () => {
   console.log("Previous button on step 2 clicked");
-  // write logic here
   moveToPreviousStep(flowManager.currentStep);
 });
 
@@ -265,7 +285,6 @@ nextBtnStepThree.addEventListener("click", () => {
 
 prevBtnStepThree.addEventListener("click", () => {
   console.log("Previous button on step 3 clicked");
-  // write logic here
   moveToPreviousStep(flowManager.currentStep);
 });
 
@@ -409,6 +428,8 @@ function monthlySubscription() {
   toggleButton.classList.remove("flick-toggle");
   subLabels[1].classList.add("light-font");
   subLabels[0].classList.remove("light-font");
+
+  resetAddOns();
 }
 
 function yearlySubscription() {
@@ -419,6 +440,8 @@ function yearlySubscription() {
     subLabels[0].classList.add("light-font");
   }
   subLabels[1].classList.remove("light-font");
+
+  resetAddOns();
 }
 
 function removePromoLabels() {
@@ -483,3 +506,85 @@ const selectBillingPeriod = () => {
     StepTwo.billingPeriod = BillingPeriod.Monthly;
   }
 };
+
+// step 3 logic
+const addOns = document.querySelectorAll(".step-3 .body .add-ons .add-on");
+console.log("addOns: ", addOns);
+
+for (let i = 0; i < addOns.length; i++) {
+  addOns[i].addEventListener("click", () => handleAddOnClick(i));
+}
+
+const handleAddOnClick = (index) => {
+  if (addOns[index].classList.contains("selected")) {
+    addOns[index].classList.remove("selected");
+    addOns[index].children[0].children[0].checked = false;
+    removeAddOns(index);
+    console.log("StepThree: ", StepThree);
+  } else {
+    addOns[index].classList.add("selected");
+    addOns[index].children[0].children[0].checked = true;
+    addAddOns(index);
+    console.log("StepThree: ", StepThree);
+  }
+};
+
+function addAddOns(index) {
+  switch (index) {
+    case 0:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepThree.addOns.onlineService = monthlyAddOns[0];
+      } else {
+        StepThree.addOns.onlineService = yearlyAddOns[0];
+      }
+      break;
+
+    case 1:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepThree.addOns.largerStorage = monthlyAddOns[1];
+      } else {
+        StepThree.addOns.largerStorage = yearlyAddOns[1];
+      }
+      break;
+
+    case 2:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepThree.addOns.customizableProfile = monthlyAddOns[2];
+      } else {
+        StepThree.addOns.customizableProfile = yearlyAddOns[2];
+      }
+      break;
+
+    default:
+      console.log("Out of Bounds: Should not get here");
+  }
+}
+
+function removeAddOns(index) {
+  switch (index) {
+    case 0:
+      StepThree.addOns.onlineService = {};
+      break;
+
+    case 1:
+      StepThree.addOns.largerStorage = {};
+      break;
+
+    case 2:
+      StepThree.addOns.customizableProfile = {};
+      break;
+
+    default:
+      console.log("Out of Bounds: Should not get here");
+  }
+}
+
+function resetAddOns() {
+  for (let i = 0; i < addOns.length; i++) {
+    if (addOns[i].classList.contains("selected")) {
+      addOns[i].classList.remove("selected");
+      addOns[i].children[0].children[0].checked = false;
+    }
+    removeAddOns(i);
+  }
+}
