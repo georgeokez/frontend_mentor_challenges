@@ -77,21 +77,39 @@
                       <label class="user-label">Name</label>
                       <p class="warning hidden">This field is required</p>
                     </div>
-                    <input class="name" name="name" type="text" />
+                    <input
+                      class="name"
+                      name="name"
+                      type="text"
+                      placeholder="e.g. Stephen King"
+                      aria-placeholder="e.g. Stephen King"
+                    />
                   </div>
                   <div class="user-input">
                     <div class="label">
                       <label class="user-label">Email Address</label>
                       <p class="warning hidden">This field is required</p>
                     </div>
-                    <input class="name" name="email" type="email" />
+                    <input
+                      class="name"
+                      name="email"
+                      type="email"
+                      placeholder="e.g. stephenking@lorem.com"
+                      aria-placeholder="e.g. stephenking@lorem.com"
+                    />
                   </div>
                   <div class="user-input">
                     <div class="label">
                       <label class="user-label">Phone Number</label>
                       <p class="warning hidden">This field is required</p>
                     </div>
-                    <input class="name" name="phone-number" type="text" />
+                    <input
+                      class="name"
+                      name="phone-number"
+                      type="text"
+                      placeholder="e.g. +1 234 567 890"
+                      aria-placeholder="e.g. +1 234 567 890"
+                    />
                   </div>
                 </div>
               </div>
@@ -112,29 +130,41 @@
                 <div class="plans">
                   <div class="plan selected">
                     <div class="icon">
-                      <!--Insert Icon Here-->
+                      <img
+                        src="./assets/images/icon-arcade.svg"
+                        alt="Acrade Icon"
+                      />
                     </div>
                     <div class="content">
                       <h3 class="label">Arcade</h3>
                       <p class="price">$9/mo</p>
+                      <p class="yearly-promo hidden">2 months free</p>
                     </div>
                   </div>
                   <div class="plan">
                     <div class="icon">
-                      <!--Insert Icon Here-->
+                      <img
+                        src="./assets/images/icon-advanced.svg"
+                        alt="Acrade Icon"
+                      />
                     </div>
                     <div class="content">
                       <h3 class="label">Advanced</h3>
                       <p class="price">$12/mo</p>
+                      <p class="yearly-promo hidden">2 months free</p>
                     </div>
                   </div>
                   <div class="plan">
                     <div class="icon">
-                      <!--Insert Icon Here-->
+                      <img
+                        src="./assets/images/icon-pro.svg"
+                        alt="Acrade Icon"
+                      />
                     </div>
                     <div class="content">
                       <h3 class="label">Pro</h3>
                       <p class="price">$15/mo</p>
+                      <p class="yearly-promo hidden">2 months free</p>
                     </div>
                   </div>
                 </div>
@@ -142,10 +172,10 @@
                 <div class="toggle-plan">
                   <div class="center-content">
                     <span>Monthly</span>
-                    <span class="toggle-btn">
-                      <button>toggle</button>
-                    </span>
-                    <span>Yearly</span>
+                    <div class="toggle-btn">
+                      <div class="toggle-ball"></div>
+                    </div>
+                    <span class="light-font">Yearly</span>
                   </div>
                 </div>
               </div>
@@ -165,27 +195,33 @@
               </div>
               <div class="body">
                 <div class="add-ons">
-                  <div class="add-on">
-                    <input type="checkbox" name="online_service" />
+                  <div class="add-on selected">
                     <div class="content">
-                      <h3 class="label">Online service</h3>
-                      <p class="desc">Access to multiplayer games</p>
+                      <input type="checkbox" checked name="online_service" />
+                      <div class="labels">
+                        <h3 class="label">Online service</h3>
+                        <p class="desc">Access to multiplayer games</p>
+                      </div>
                     </div>
                     <p class="price">+$1/mo</p>
                   </div>
                   <div class="add-on">
-                    <input type="checkbox" name="larger_storage" />
                     <div class="content">
-                      <h3 class="label">Larger storage</h3>
-                      <p class="desc">Extra 1TB of cloud save</p>
+                      <input type="checkbox" name="larger_storage" />
+                      <div class="labels">
+                        <h3 class="label">Larger storage</h3>
+                        <p class="desc">Extra 1TB of cloud save</p>
+                      </div>
                     </div>
                     <p class="price">+$2/mo</p>
                   </div>
                   <div class="add-on">
-                    <input type="checkbox" name="customizable_profile" />
                     <div class="content">
-                      <h3 class="label">Customizable Profile</h3>
-                      <p class="desc">Custom theme on your profile</p>
+                      <input type="checkbox" name="customizable_profile" />
+                      <div class="labels">
+                        <h3 class="label">Customizable Profile</h3>
+                        <p class="desc">Custom theme on your profile</p>
+                      </div>
                     </div>
                     <p class="price">+$2/mo</p>
                   </div>

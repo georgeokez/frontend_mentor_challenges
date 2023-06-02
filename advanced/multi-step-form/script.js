@@ -1,25 +1,69 @@
+const PlanNames = {
+  arcade: "arcade",
+  advanced: "advanced",
+  pro: "pro",
+};
+
+const BillingPeriod = {
+  Monthly: "Monthly",
+  Yearly: "Yearly",
+};
+
+const MonthlyPrice = {
+  Arcade: 9,
+  Advanced: 12,
+  Pro: 15,
+};
+
+const YearlyPrice = {
+  Arcade: 90,
+  Advanced: 120,
+  Pro: 150,
+};
+
 const StepOne = {
   name: "",
   email: "",
   phoneNumber: "",
 };
 
+//Default Plans are set to Monthly
 const Plans = {
-  arcade: {
-    name: "arcade",
-    price: 9,
+  monthly: {
+    arcade: {
+      name: PlanNames.arcade,
+      price: MonthlyPrice.Arcade,
+      billingPeriod: BillingPeriod.Monthly,
+    },
+    advanced: {
+      name: PlanNames.advanced,
+      price: MonthlyPrice.Advanced,
+      billingPeriod: BillingPeriod.Monthly,
+    },
+    pro: {
+      name: PlanNames.pro,
+      price: MonthlyPrice.Pro,
+      billingPeriod: BillingPeriod.Monthly,
+    },
   },
-  advanced: {
-    name: "advanced",
-    price: 12,
-  },
-  pro: {
-    name: "Pro",
-    price: 15,
+  yearly: {
+    arcade: {
+      name: PlanNames.arcade,
+      price: YearlyPrice.Arcade,
+      billingPeriod: BillingPeriod.Yearly,
+    },
+    advanced: {
+      name: PlanNames.advanced,
+      price: YearlyPrice.Advanced,
+      billingPeriod: BillingPeriod.Yearly,
+    },
+    pro: {
+      name: PlanNames.pro,
+      price: YearlyPrice.Pro,
+      billingPeriod: BillingPeriod.Yearly,
+    },
   },
 };
-
-const BillingPeriod = ["Monthly", "Yearly"];
 
 class Addon {
   constructor(name, description, price, selected) {
@@ -50,8 +94,8 @@ const customizableProfile = new Addon(
 );
 
 const StepTwo = {
-  plan: Plans.arcade,
-  billingPeriod: BillingPeriod[0],
+  plan: Plans.monthly.arcade,
+  billingPeriod: BillingPeriod.Monthly,
 };
 
 const StepThree = {
@@ -271,3 +315,171 @@ function moveToPreviousStep(currentStep) {
 function addValidationChecker(validateInput) {
   validateInput.addEventListener("click", () => {});
 }
+
+// Step 2 Logic
+
+// handle subscription selection
+const subPlans = document.querySelectorAll("div.plan");
+
+for (let i = 0; i < subPlans.length; i++) {
+  subPlans[i].addEventListener("click", () => handleSubcriptionPlanClick(i));
+}
+
+const handleSubcriptionPlanClick = (index) => {
+  removePrevSelection();
+  selectPlan(index);
+  subPlans[index].classList.add("selected");
+  console.log("StepTwo Object: ", StepTwo);
+};
+
+const removePrevSelection = () => {
+  for (let i = 0; i < subPlans.length; i++) {
+    if (subPlans[i].classList.contains("selected")) {
+      subPlans[i].classList.remove("selected");
+      return;
+    }
+  }
+};
+
+const selectPlan = (index) => {
+  switch (index) {
+    case 0:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepTwo.plan = Plans.monthly.arcade;
+      } else {
+        StepTwo.plan = Plans.yearly.arcade;
+      }
+
+      break;
+
+    case 1:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepTwo.plan = Plans.monthly.advanced;
+      } else {
+        StepTwo.plan = Plans.yearly.advanced;
+      }
+
+      break;
+
+    case 2:
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        StepTwo.plan = Plans.monthly.pro;
+      } else {
+        StepTwo.plan = Plans.yearly.pro;
+      }
+
+      break;
+
+    default:
+      console.log("No Plan was selected");
+  }
+};
+
+console.log("subPlans: ", subPlans);
+
+// handle toggling
+const subLabels = document.querySelectorAll(
+  "div.step-2 div.body div.toggle-plan div.center-content span"
+);
+console.log("toggleButton: ", subLabels);
+
+const toggleButton = document.querySelector(
+  "div.step-2 div.body div.toggle-plan div.center-content div.toggle-btn"
+);
+
+toggleButton.addEventListener("click", () => {
+  selectBillingPeriod();
+
+  // default toggle is on monthly billing
+  if (toggleButton.classList.contains("flick-toggle")) {
+    monthlySubscription();
+  } else {
+    yearlySubscription();
+  }
+
+  console.log("StepTwo Object: ", StepTwo);
+});
+
+const prices = document.querySelectorAll(".plan .content .price");
+const yearlyPromo = document.querySelectorAll(".plan .content .yearly-promo");
+
+function monthlySubscription() {
+  removePromoLabels();
+  changePricesToMonthly();
+  toggleButton.classList.remove("flick-toggle");
+  subLabels[1].classList.add("light-font");
+  subLabels[0].classList.remove("light-font");
+}
+
+function yearlySubscription() {
+  addPromoLabels();
+  changePricesToYearly();
+  toggleButton.classList.add("flick-toggle");
+  if (!subLabels[0].classList.contains("light-font")) {
+    subLabels[0].classList.add("light-font");
+  }
+  subLabels[1].classList.remove("light-font");
+}
+
+function removePromoLabels() {
+  for (let i = 0; i < yearlyPromo.length; i++) {
+    yearlyPromo[i].classList.add("hidden");
+  }
+}
+
+function addPromoLabels() {
+  for (let i = 0; i < yearlyPromo.length; i++) {
+    yearlyPromo[i].classList.remove("hidden");
+  }
+}
+
+function changePricesToMonthly() {
+  for (let i = 0; i < prices.length; i++) {
+    switch (i) {
+      case 0:
+        StepTwo.plan = Plans.monthly.arcade;
+        prices[0].innerHTML = "$9/mo";
+        break;
+      case 1:
+        StepTwo.plan = Plans.monthly.advanced;
+        prices[1].innerHTML = "$12/mo";
+        break;
+      case 2:
+        StepTwo.plan = Plans.monthly.pro;
+        prices[2].innerHTML = "$15/mo";
+        break;
+      default:
+        console.log("Out of bound - should not get here");
+    }
+  }
+}
+
+function changePricesToYearly() {
+  for (let i = 0; i < prices.length; i++) {
+    switch (i) {
+      case 0:
+        StepTwo.plan = Plans.yearly.arcade;
+        prices[0].innerHTML = "$90/yr";
+        break;
+      case 1:
+        StepTwo.plan = Plans.yearly.advanced;
+        prices[1].innerHTML = "$120/yr";
+        break;
+      case 2:
+        StepTwo.plan = Plans.yearly.pro;
+        prices[2].innerHTML = "$150/yr";
+        break;
+      default:
+        console.log("Out of bound - should not get here");
+    }
+  }
+}
+
+// Note default billing period is monthly
+const selectBillingPeriod = () => {
+  if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+    StepTwo.billingPeriod = BillingPeriod.Yearly;
+  } else {
+    StepTwo.billingPeriod = BillingPeriod.Monthly;
+  }
+};
