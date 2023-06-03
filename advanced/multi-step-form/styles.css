@@ -466,6 +466,34 @@ body {
 }
 
 
+/* Step 5 Styles */
+.step-5 {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 20px);
+    width: 450px;
+    justify-content: center;
+}
+
+.step-5 .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-5 .body h2 {
+    color: #082a52;
+    font-size: 28px;
+    margin-top: 30px;
+    margin-bottom: 18px;
+}
+
+.step-5 .body p {
+    text-align: center;
+    color: #a6a6b0;
+    line-height: 28px;
+}
+
 
 
 /* 
