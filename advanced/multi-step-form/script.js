@@ -134,17 +134,6 @@ const flowManager = new FlowManager(currentStep, [
   StepFour,
 ]);
 
-/*
-console.log("Logging out all the steps");
-console.log("Step One: ", StepOne);
-console.log("Step Two: ", StepTwo);
-console.log("Step Three: ", StepThree);
-console.log("Step Four: ", StepFour);
-console.log("Flow Manager: ", flowManager);
-console.log("Flow Manager (Steps): ", flowManager.steps);
-console.log("Flow Manager (Current Step): ", flowManager.getCurrentStep());
-*/
-
 // Side Bar
 const sideBarSteps = document.querySelectorAll(".number-circle");
 
@@ -206,9 +195,9 @@ const warningLabel = document.querySelectorAll(
   "div.step-1 div.user-input p.warning"
 );
 
-nextBtnStepOne.addEventListener("click", () => {
-  console.log("Next button on step 1 clicked");
-  console.log("Warning Labels:", warningLabel);
+nextBtnStepOne.addEventListener("click", () => nextBtnStepOneHandleCall());
+
+const nextBtnStepOneHandleCall = () => {
   let validationErrors = 0;
 
   if (userNameInput.value) {
@@ -246,10 +235,11 @@ nextBtnStepOne.addEventListener("click", () => {
   if (validationErrors == 0) {
     moveToNextStep(flowManager.currentStep);
   }
-});
+};
 
-nextBtnStepTwo.addEventListener("click", () => {
-  console.log("Next button on step 2 clicked");
+nextBtnStepTwo.addEventListener("click", () => nextBtnStepTwoHandleCall());
+
+const nextBtnStepTwoHandleCall = () => {
   // write logic here
   const prices = document.querySelectorAll(
     ".step-3 .body .add-ons .add-on .price"
@@ -270,35 +260,42 @@ nextBtnStepTwo.addEventListener("click", () => {
     }
   }
   moveToNextStep(flowManager.currentStep);
-});
+};
 
-prevBtnStepTwo.addEventListener("click", () => {
-  console.log("Previous button on step 2 clicked");
+prevBtnStepTwo.addEventListener("click", () => prevBtnStepTwoHandleCall());
+
+const prevBtnStepTwoHandleCall = () => {
   moveToPreviousStep(flowManager.currentStep);
-});
+};
 
-nextBtnStepThree.addEventListener("click", () => {
-  console.log("Next button on step 3 clicked");
+nextBtnStepThree.addEventListener("click", () => nextBtnStepThreeHandleCall());
+
+const nextBtnStepThreeHandleCall = () => {
   // write logic here
   moveToNextStep(flowManager.currentStep);
-});
+};
 
-prevBtnStepThree.addEventListener("click", () => {
-  console.log("Previous button on step 3 clicked");
+prevBtnStepThree.addEventListener("click", () => prevBtnStepThreeHandleCall());
+
+const prevBtnStepThreeHandleCall = () => {
   moveToPreviousStep(flowManager.currentStep);
-});
+};
 
-confirmBtnStepFour.addEventListener("click", () => {
-  console.log("Confirm button on step 4 clicked");
+confirmBtnStepFour.addEventListener("click", () =>
+  confirmBtnStepFourHandleCall()
+);
+
+const confirmBtnStepFourHandleCall = () => {
   // write logic here
   moveToNextStep(flowManager.currentStep);
-});
+};
 
-prevBtnStepFour.addEventListener("click", () => {
-  console.log("Previous button on step 4 clicked");
+prevBtnStepFour.addEventListener("click", () => prevBtnStepFourHandleCall());
+
+const prevBtnStepFourHandleCall = () => {
   // write logic here
   moveToPreviousStep(flowManager.currentStep);
-});
+};
 
 function moveToNextStep(currentStep) {
   const indexCurrentStep = currentStep - 1;
@@ -314,7 +311,6 @@ function moveToNextStep(currentStep) {
     stepPages[indexCurrentStep + 1].classList.remove("hidden");
 
     flowManager.currentStep = currentStep + 1;
-    console.log("Flow manager (current-step): ", flowManager.currentStep);
   }
 }
 
@@ -328,7 +324,6 @@ function moveToPreviousStep(currentStep) {
   stepPages[indexCurrentStep - 1].classList.remove("hidden");
 
   flowManager.currentStep = currentStep - 1;
-  console.log("Flow manager (current-step): ", flowManager.currentStep);
 }
 
 function addValidationChecker(validateInput) {
@@ -349,7 +344,6 @@ const handleSubcriptionPlanClick = (index) => {
   selectPlan(index);
   setPlanLabelsForStep4();
   subPlans[index].classList.add("selected");
-  console.log("StepTwo Object: ", StepTwo);
 };
 
 const removePrevSelection = () => {
@@ -420,8 +414,6 @@ toggleButton.addEventListener("click", () => {
     setPlanLabelsForStep4();
     displayAddonsInStep4();
   }
-
-  console.log("StepTwo Object: ", StepTwo);
 });
 
 const prices = document.querySelectorAll(".plan .content .price");
@@ -513,7 +505,6 @@ const selectBillingPeriod = () => {
 // step 3 logic
 const addOns = document.querySelectorAll(".step-3 .body .add-ons .add-on");
 let totalAddonPrice = 0;
-console.log("addOns: ", addOns);
 
 for (let i = 0; i < addOns.length; i++) {
   addOns[i].addEventListener("click", () => handleAddOnClick(i));
@@ -525,13 +516,11 @@ const handleAddOnClick = (index) => {
     addOns[index].children[0].children[0].checked = false;
     removeAddOns(index);
     displayAddonsInStep4();
-    console.log("StepThree: ", StepThree);
   } else {
     addOns[index].classList.add("selected");
     addOns[index].children[0].children[0].checked = true;
     addAddOns(index);
     displayAddonsInStep4();
-    console.log("StepThree: ", StepThree);
   }
 };
 
@@ -665,8 +654,6 @@ const totalPrice = document.querySelectorAll(".step-4 .body .total p");
 let totalCalculatedPrice = 0;
 
 //view step 4 objects
-console.log("planLabel: ", planLabel);
-console.log("planPriceLabel: ", planPriceLabel);
 
 function setPlanLabelsForStep4() {
   const planStep4 = StepTwo.plan.name;
@@ -690,11 +677,9 @@ setPlanLabelsForStep4();
 changeBtn.addEventListener("click", () => {
   moveToPreviousStep(flowManager.currentStep);
   moveToPreviousStep(flowManager.currentStep);
+  mobileNextBtn.innerHTML = "Next Step";
+  mobileNextBtn.classList.remove("add-confirm-bg-color");
 });
-
-// for (let i = 1; i < items.length; i++) {
-//   StepThree.addOns;
-// }
 
 function displayAddonsInStep4() {
   let counter = 1;
@@ -730,8 +715,6 @@ function displayAddonsInStep4() {
 }
 
 function setTotalPrice(addonPrice) {
-  // let addonPriceNumb = +addonPrice;
-
   if (addonPrice != 0) {
     totalCalculatedPrice += addonPrice;
   } else {
@@ -751,6 +734,59 @@ function setTotalPrice(addonPrice) {
   totalPrice[1].innerHTML = priceText + billingText;
 }
 
-console.log("changeBtn: ", changeBtn);
-console.log("items: ", items);
-console.log("totalPrice: ", totalPrice);
+// handle mobile view logic
+const mobileBtnContainer = document.querySelector(".mobile-btns");
+const mobileBackBtn = document.querySelector(".mobile-btns .back");
+const mobileNextBtn = document.querySelector(".mobile-btns .next");
+
+if (flowManager.currentStep === 1) {
+  mobileBackBtn.classList.add("hidden");
+  mobileNextBtn.classList.add("float-right");
+}
+
+mobileBackBtn.addEventListener("click", () => {
+  switch (flowManager.currentStep) {
+    case 2:
+      prevBtnStepTwoHandleCall();
+      mobileBackBtn.classList.add("hidden");
+      mobileBtnContainer.classList.remove("add-space-between");
+      break;
+    case 3:
+      prevBtnStepThreeHandleCall();
+      break;
+    case 4:
+      prevBtnStepFourHandleCall();
+      mobileNextBtn.innerHTML = "Next Step";
+      mobileNextBtn.classList.remove("add-confirm-bg-color");
+      break;
+
+    default:
+      console.log("Out of bounds - should not get here");
+  }
+});
+
+mobileNextBtn.addEventListener("click", () => {
+  switch (flowManager.currentStep) {
+    case 1:
+      nextBtnStepOneHandleCall();
+      mobileBackBtn.classList.remove("hidden");
+      mobileBtnContainer.classList.add("add-space-between");
+      break;
+    case 2:
+      nextBtnStepTwoHandleCall();
+      break;
+    case 3:
+      nextBtnStepThreeHandleCall();
+      console.log("mobileNextBtn.innerHTML: ", mobileNextBtn.innerHTML);
+      mobileNextBtn.innerHTML = "Confrim";
+      mobileNextBtn.classList.add("add-confirm-bg-color");
+      break;
+    case 4:
+      confirmBtnStepFourHandleCall();
+      mobileBtnContainer.classList.add("hidden");
+      break;
+
+    default:
+      console.log("Out of bounds - should not get here");
+  }
+});
