@@ -347,6 +347,7 @@ for (let i = 0; i < subPlans.length; i++) {
 const handleSubcriptionPlanClick = (index) => {
   removePrevSelection();
   selectPlan(index);
+  setPlanLabelsForStep4();
   subPlans[index].classList.add("selected");
   console.log("StepTwo Object: ", StepTwo);
 };
@@ -412,8 +413,12 @@ toggleButton.addEventListener("click", () => {
   // default toggle is on monthly billing
   if (toggleButton.classList.contains("flick-toggle")) {
     monthlySubscription();
+    setPlanLabelsForStep4();
+    displayAddonsInStep4();
   } else {
     yearlySubscription();
+    setPlanLabelsForStep4();
+    displayAddonsInStep4();
   }
 
   console.log("StepTwo Object: ", StepTwo);
@@ -460,42 +465,40 @@ function changePricesToMonthly() {
   for (let i = 0; i < prices.length; i++) {
     switch (i) {
       case 0:
-        StepTwo.plan = Plans.monthly.arcade;
         prices[0].innerHTML = "$9/mo";
         break;
       case 1:
-        StepTwo.plan = Plans.monthly.advanced;
         prices[1].innerHTML = "$12/mo";
         break;
       case 2:
-        StepTwo.plan = Plans.monthly.pro;
         prices[2].innerHTML = "$15/mo";
         break;
       default:
         console.log("Out of bound - should not get here");
     }
   }
+
+  modifyPlan(StepTwo.plan.name);
 }
 
 function changePricesToYearly() {
   for (let i = 0; i < prices.length; i++) {
     switch (i) {
       case 0:
-        StepTwo.plan = Plans.yearly.arcade;
         prices[0].innerHTML = "$90/yr";
         break;
       case 1:
-        StepTwo.plan = Plans.yearly.advanced;
         prices[1].innerHTML = "$120/yr";
         break;
       case 2:
-        StepTwo.plan = Plans.yearly.pro;
         prices[2].innerHTML = "$150/yr";
         break;
       default:
         console.log("Out of bound - should not get here");
     }
   }
+
+  modifyPlan(StepTwo.plan.name);
 }
 
 // Note default billing period is monthly
@@ -509,6 +512,7 @@ const selectBillingPeriod = () => {
 
 // step 3 logic
 const addOns = document.querySelectorAll(".step-3 .body .add-ons .add-on");
+let totalAddonPrice = 0;
 console.log("addOns: ", addOns);
 
 for (let i = 0; i < addOns.length; i++) {
@@ -520,11 +524,13 @@ const handleAddOnClick = (index) => {
     addOns[index].classList.remove("selected");
     addOns[index].children[0].children[0].checked = false;
     removeAddOns(index);
+    displayAddonsInStep4();
     console.log("StepThree: ", StepThree);
   } else {
     addOns[index].classList.add("selected");
     addOns[index].children[0].children[0].checked = true;
     addAddOns(index);
+    displayAddonsInStep4();
     console.log("StepThree: ", StepThree);
   }
 };
@@ -534,24 +540,36 @@ function addAddOns(index) {
     case 0:
       if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
         StepThree.addOns.onlineService = monthlyAddOns[0];
+        setTotalPrice(StepThree.addOns.onlineService.price);
+        totalAddonPrice += StepThree.addOns.onlineService.price;
       } else {
         StepThree.addOns.onlineService = yearlyAddOns[0];
+        setTotalPrice(StepThree.addOns.onlineService.price);
+        totalAddonPrice += StepThree.addOns.onlineService.price;
       }
       break;
 
     case 1:
       if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
         StepThree.addOns.largerStorage = monthlyAddOns[1];
+        setTotalPrice(StepThree.addOns.largerStorage.price);
+        totalAddonPrice += StepThree.addOns.largerStorage.price;
       } else {
         StepThree.addOns.largerStorage = yearlyAddOns[1];
+        setTotalPrice(StepThree.addOns.largerStorage.price);
+        totalAddonPrice += StepThree.addOns.largerStorage.price;
       }
       break;
 
     case 2:
       if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
         StepThree.addOns.customizableProfile = monthlyAddOns[2];
+        setTotalPrice(StepThree.addOns.customizableProfile.price);
+        totalAddonPrice += StepThree.addOns.customizableProfile.price;
       } else {
         StepThree.addOns.customizableProfile = yearlyAddOns[2];
+        setTotalPrice(StepThree.addOns.customizableProfile.price);
+        totalAddonPrice += StepThree.addOns.customizableProfile.price;
       }
       break;
 
@@ -564,14 +582,38 @@ function removeAddOns(index) {
   switch (index) {
     case 0:
       StepThree.addOns.onlineService = {};
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        setTotalPrice(-1);
+        totalAddonPrice -= 1;
+      } else {
+        setTotalPrice(-10);
+        totalAddonPrice -= 10;
+      }
+
       break;
 
     case 1:
       StepThree.addOns.largerStorage = {};
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        setTotalPrice(-2);
+        totalAddonPrice -= 2;
+      } else {
+        setTotalPrice(-20);
+        totalAddonPrice -= 20;
+      }
+
       break;
 
     case 2:
       StepThree.addOns.customizableProfile = {};
+      if (StepTwo.billingPeriod == BillingPeriod.Monthly) {
+        setTotalPrice(-2);
+        totalAddonPrice -= 2;
+      } else {
+        setTotalPrice(-20);
+        totalAddonPrice -= 20;
+      }
+
       break;
 
     default:
@@ -587,4 +629,128 @@ function resetAddOns() {
     }
     removeAddOns(i);
   }
+  totalAddonPrice = 0;
 }
+
+function modifyPlan(planName) {
+  switch (planName) {
+    case PlanNames.arcade:
+      selectPlan(0);
+      break;
+    case PlanNames.advanced:
+      selectPlan(1);
+      break;
+    case PlanNames.pro:
+      selectPlan(2);
+      break;
+    default:
+      console("Out of bounds - should not get here");
+  }
+}
+
+// Step 4 logic
+// fetch all DOM elements for step 4
+
+const planLabel = document.querySelector(
+  ".step-4 .body .items-selected .item:nth-child(1) .label .bold"
+);
+const changeBtn = document.querySelector(
+  ".step-4 .body .items-selected .item:nth-child(1) .label .change-btn"
+);
+const planPriceLabel = document.querySelector(
+  ".step-4 .body .items-selected .item:nth-child(1) > p"
+);
+const items = document.querySelectorAll(".step-4 .body .items-selected .item");
+const totalPrice = document.querySelectorAll(".step-4 .body .total p");
+let totalCalculatedPrice = 0;
+
+//view step 4 objects
+console.log("planLabel: ", planLabel);
+console.log("planPriceLabel: ", planPriceLabel);
+
+function setPlanLabelsForStep4() {
+  const planStep4 = StepTwo.plan.name;
+
+  planLabel.innerHTML =
+    planStep4.charAt(0).toUpperCase() +
+    planStep4.slice(1) +
+    " <span>(" +
+    StepTwo.billingPeriod +
+    ")</span>";
+
+  let priceText = "$" + StepTwo.plan.price;
+  let billingText =
+    StepTwo.billingPeriod == BillingPeriod.Monthly ? "/mo" : "/yr";
+
+  planPriceLabel.innerHTML = priceText + billingText;
+  setTotalPrice(0);
+}
+setPlanLabelsForStep4();
+
+changeBtn.addEventListener("click", () => {
+  moveToPreviousStep(flowManager.currentStep);
+  moveToPreviousStep(flowManager.currentStep);
+});
+
+// for (let i = 1; i < items.length; i++) {
+//   StepThree.addOns;
+// }
+
+function displayAddonsInStep4() {
+  let counter = 1;
+  let noSelectedAddOns = 0;
+
+  for (const [key, value] of Object.entries(StepThree.addOns)) {
+    if (value && value.constructor !== Object) {
+      let priceText = "+$" + value.price;
+      let billingText =
+        value.billingPeriod == BillingPeriod.Monthly ? "/mo" : "/yr";
+      items[counter].children[1].innerHTML = priceText + billingText;
+
+      if (items[counter].classList.contains("hidden")) {
+        items[counter].classList.remove("hidden");
+      }
+      noSelectedAddOns++;
+    } else {
+      if (!items[counter].classList.contains("hidden")) {
+        items[counter].classList.add("hidden");
+      }
+    }
+    counter++;
+  }
+
+  if (noSelectedAddOns !== 0) {
+    items[4].classList.add("hidden");
+  } else {
+    items[4].classList.remove("hidden");
+  }
+
+  noSelectedAddOns = 0;
+  counter = 0;
+}
+
+function setTotalPrice(addonPrice) {
+  // let addonPriceNumb = +addonPrice;
+
+  if (addonPrice != 0) {
+    totalCalculatedPrice += addonPrice;
+  } else {
+    totalCalculatedPrice = StepTwo.plan.price;
+
+    if (totalAddonPrice !== 0) {
+      totalCalculatedPrice += totalAddonPrice;
+    }
+  }
+
+  let priceText = "$" + totalCalculatedPrice;
+
+  let billingText =
+    StepTwo.billingPeriod == BillingPeriod.Monthly ? "/mo" : "/yr";
+  totalPrice[0].innerHTML =
+    "Total " + "<span>(per " + StepTwo.billingPeriod.toLowerCase() + ")</span>";
+  totalPrice[1].innerHTML = priceText + billingText;
+}
+
+console.log("changeBtn: ", changeBtn);
+console.log("items: ", items);
+console.log("totalPrice: ", totalPrice);
